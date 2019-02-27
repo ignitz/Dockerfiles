@@ -1,0 +1,61 @@
+version: "3.4"
+
+services:
+  koel:
+    image: 0xcaff/koel
+    depends_on:
+      - database
+    expose:
+      - 80
+    environment:
+      DB_CONNECTION: mysql
+      DB_HOST: database
+      DB_USERNAME: koel
+      DB_PASSWORD: koel
+      DB_DATABASE: koel
+      VIRTUAL_HOST: koel.timon.local
+      VIRTUAL_PORT: 80
+    volumes:
+      - /home/yuriniitsuma/Music:/music
+      - covers:/var/www/html/public/img/covers
+    restart: always
+
+  database:
+    image: mysql/mysql-server:5.7
+    volumes:
+      - db:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: koel
+      MYSQL_USER: koel
+      MYSQL_PASSWORD: koel
+
+    restart: always
+
+  # phpmyadmin:
+  #   depends_on:
+  #     - database
+  #   image: phpmyadmin/phpmyadmin
+  #   restart: always
+  #   expose:
+  #     - 80
+  #   environment:
+  #     PMA_HOST: database:3306
+  #     MYSQL_ROOT_PASSWORD: password
+  #     VIRTUAL_HOST: phpmyadmin.timon.local
+  #     VIRTUAL_PORT: 80
+
+volumes:
+  db:
+    driver: local
+
+  music:
+    driver: local
+
+  covers:
+    driver: local
+
+networks:
+  default:
+    external:
+      name: router_default
