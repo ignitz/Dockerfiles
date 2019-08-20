@@ -1,0 +1,15 @@
+version: "2"
+services:
+  nifi:
+    image: apache/nifi
+  nginx:
+    # image: quay.io/dtan4/nginx-basic-auth-proxy:latest
+    image: nginx_nifi
+    ports:
+      - 80:80
+      - 8090:8090
+    environment:
+      - BASIC_AUTH_USERNAME=username
+      - BASIC_AUTH_PASSWORD=password
+      - PROXY_PASS=http://nifi:8080/
+      - CLIENT_MAX_BODY_SIZE=200M
